@@ -10,7 +10,7 @@
     <router-link to="/test2">test2</router-link>
     <button @click="addRoutes">addRoutes</button>
     <button @click="addRoutes2">addRoutes2</button>
-    <keep-alive>
+    <keep-alive :exclude="excludeStr">
       <router-view></router-view>
 
     </keep-alive>
@@ -55,12 +55,16 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
+      excludeStr:'',
       msg: 'Welcome to Your Vue.js App',
       user:{
         name:'luozheao',
         age:18
       }
     }
+  },
+  computed:{
+
   },
   mounted(){
      console.log(this.$router)
@@ -79,25 +83,35 @@ export default {
       //   }
       // ])
       console.log(this.$router)
-
       this.$router.options.routes[0].children.push({
           path:'test',
           component:deepCopy(test)
       })
+      let test2=deepCopy(test)
+      test2.name="test2"
+      console.log(test,test2)
       this.$router.options.routes[0].children.push({
         path:'test2',
-        component:deepCopy(test)
+        component:test2
       })
-
+      console.log(this.$router.options.routes)
       this.$router.addRoutes(this.$router.options.routes)
+this.$nextTick(()=>{
+  this.$router.options.routes[0].children.pop()
+  this.$router.addRoutes(this.$router.options.routes)
+})
+
 
       // this.$router.push({path:'/test'})  //刷新就没有了
     },
     addRoutes2(){
-      console.log(this.$router)
-console.log(JSON.parse(JSON.stringify(test)))
+      this.excludeStr='test2'
+      this.$router.push({path:'/test'})
+      this.$nextTick(()=>{
+         this.$router.push({path:'/test2'})  //刷新就没有了
+        this.excludeStr=''
+      })
 
-      // this.$router.push({path:'/test2'})  //刷新就没有了
     },
     reset(){
        console.log(this,this.$options.data())
