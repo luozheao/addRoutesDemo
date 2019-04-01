@@ -1,5 +1,7 @@
 <template>
   <div class="hello">
+<hh></hh>
+    <!--<common></common>-->
     <h1>{{ msg }}</h1>
     <div>{{user.name}}</div>
     <div>{{user.age}}</div>
@@ -12,7 +14,6 @@
     <button @click="addRoutes2">addRoutes2</button>
     <keep-alive :exclude="excludeStr">
       <router-view></router-view>
-
     </keep-alive>
   </div>
 </template>
@@ -50,15 +51,19 @@ function deepCopy (obj, cache = []) {
 
   return copy
 }
+import  hh from './hh.vue'
+import  obj from './b.js'
+
+console.log(obj)
 export default {
-  components:{test},
+  components:{test,hh},
   name: 'HelloWorld',
   data () {
     return {
       excludeStr:'',
       msg: 'Welcome to Your Vue.js App',
       user:{
-        name:'luozheao',
+        name:'luojie',
         age:18
       }
     }

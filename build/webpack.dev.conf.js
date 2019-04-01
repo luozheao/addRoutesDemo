@@ -15,7 +15,21 @@ const PORT = process.env.PORT && Number(process.env.PORT)
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
+    rules: [...utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true }),
+      {
+        test: /\.vue$/,
+        use: [{
+          loader:'comment-require-loader',
+          options:{
+            url:'src/components/b.js'
+          }
+        }]
+      }
+    ]
+  },
+  resolveLoader:{
+    // 去哪些目录下寻找 Loader，有先后顺序之分
+    modules: ['node_modules','./loaders'],
   },
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
@@ -23,6 +37,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   // these devServer options should be customized in /config/index.js
   devServer: {
     clientLogLevel: 'warning',
+    host: '0.0.0.0',
     historyApiFallback: {
       rewrites: [
         { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
@@ -31,7 +46,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     hot: true,
     contentBase: false, // since we use CopyWebpackPlugin.
     compress: true,
-    host: HOST || config.dev.host,
+    // host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     open: config.dev.autoOpenBrowser,
     overlay: config.dev.errorOverlay
