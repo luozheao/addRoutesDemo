@@ -9,7 +9,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
-
+const EndWebpackPlugin = require('./test.js')
+function exec (cmd) {
+  return require('child_process').execSync(cmd).toString().trim()
+}
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
@@ -60,6 +63,13 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     }
   },
   plugins: [
+    new EndWebpackPlugin(() => {
+      // exec('node ./build/create-file.js')
+      // Webpack 构建成功，并且文件输出了后会执行到这里，在这里可以做发布文件操作
+    }, (err) => {
+      // Webpack 构建失败，err 是导致错误的原因
+      console.error(err);        
+    }),
     new webpack.DefinePlugin({
       'process.env': require('../config/dev.env')
     }),

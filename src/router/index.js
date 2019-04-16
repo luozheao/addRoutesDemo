@@ -5,14 +5,12 @@ import Vue from 'vue'
 const Foo = { template: '<div>foo</div>' }
 const Bar = { template: '<div>bar</div>' }
 Vue.use(VueRouter)
-
+// children:[
+//   { path: 'foo', component: Foo },
+//   { path: 'bar', component: Bar }
+// ]
 const routes = [
-  { path:'/',component:HelloWorld,
-    children:[
-      { path: 'foo', component: Foo },
-      { path: 'bar', component: Bar }
-    ]
-  }
+  { path:'/',component:HelloWorld}
 ]
 
 // 3. 创建 router 实例，然后传 `routes` 配置

@@ -4,12 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 Vue.config.productionTip = false
-console.log(process.env.NODE_ENV == 'production')
-
-
-if(process.env.NODE_ENV !== 'production'){
-  // Vue.component('common',common)
-}
 
 /* eslint-disable no-new */
 new Vue({
