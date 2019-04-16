@@ -3,8 +3,14 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-Vue.config.productionTip = false
 
+import  $d from './data.js'
+Vue.prototype.$d=$d
+
+Vue.config.productionTip = false
+Vue.prototype.$t=(module,key)=>{
+  return module+':'+key
+}
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

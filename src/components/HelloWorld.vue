@@ -1,10 +1,12 @@
 
 <template>
 <div>
-   {{name2}}
+  {{$t('order','订单23')}}
+  <br>
+  {{$d}}
 </div>
 </template>
- 
+
 <script>
 
 const extend = {
@@ -38,24 +40,24 @@ const mixin2 = {
     }
   },
    methods:{
-    
+
   }
 }
-import b from './b.js'
+
 export default {
   mixins: [mixin1, mixin2],
   extends: extend,
   name: 'app',
   data () {
     return {
-      name: 'name'
+      name: 'name1234'
     }
   },
   methods:{
-   
+
   },
   mounted(){
-    console.log(b,1111233311113)
+
   }
 }
 </script>

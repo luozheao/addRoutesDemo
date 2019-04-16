@@ -3,24 +3,9 @@ class EndWebpackPlugin {
     // 存下在构造函数中传入的回调函数
     this.doneCallback = doneCallback;
     this.failCallback = failCallback;
+
   }
 
-  getFullTemplatePath(template, context) {
-    // If the template doesn't use a loader use the lodash template loader
-    if (template.indexOf("!") === -1) {
-      template =
-        require.resolve("./lib/loader.js") +
-        "!" +
-        path.resolve(context, template);
-    }
-    // Resolve template path
-    return template.replace(
-      /([!])([^/\\][^!?]+|[^/\\!?])($|\?[^!?\n]+$)/,
-      function(match, prefix, filepath, postfix) {
-        return prefix + path.resolve(filepath) + postfix;
-      }
-    );
-  }
 
   apply(compiler) {
     // 1.  compilation.chunks  所有的代码块chunk
@@ -29,7 +14,7 @@ class EndWebpackPlugin {
     // 4.  chunk.files 代码块chunk的文件信息,包含filename
     // 5.  compilation.assets[filename].source()  编译后的源文件,可对它转换
     console.log(compiler.context);
-
+    var changeTag = true
     var fs = require("fs");
     compiler.plugin("environment", (compilation, callback) => {
       console.log("environment");
@@ -41,13 +26,13 @@ class EndWebpackPlugin {
       console.log("afterPlugins");
     });
     compiler.plugin("after-resolvers", (compilation, callback) => {
-      
+
       console.log("afterResolvers");
     });
 
     compiler.plugin("watch-run", (compilation, callback) => {
       console.log("watchRun");
-    
+
     //   let ddd = 123;
     //   let str = `
     //   export default {
@@ -55,7 +40,7 @@ class EndWebpackPlugin {
     //    b:222222,
     //    c:232323,
     //    d:${ddd}
-    //  } 
+    //  }
     //   `;
     //   let str2 = fs.readFileSync(
     //     process.cwd() + "/src/components/b.js",
@@ -79,24 +64,16 @@ class EndWebpackPlugin {
     //   callback();
     // });
     compiler.plugin("before-compile", (compilation, callback) => {
-      console.log("before-compile");  
+      console.log("before-compile");
       callback();
     });
     compiler.plugin("compilation", function(compilation) {
       console.log("compilation");
-      var filelist=`export default {a:1}`
-      compilation.assets["b.js"] = {
-        source: function() {
-          return filelist;
-        },
-        size: function() {
-          return filelist.length;
-        }
-      };
+
     });
 
     compiler.plugin("after-compile", (compilation, callback) => {
-      console.log("after-compile"); 
+      console.log("after-compile");
       // 把 HTML 文件添加到文件依赖列表，好让 Webpack 去监听 HTML 模块文件，在 HTML 模版文件发生变化时重新启动一次编译
       //   compilation.fileDependencies.push(filePath);
       callback();
@@ -105,7 +82,43 @@ class EndWebpackPlugin {
     // 源文件的转换和组装已经完成
     compiler.plugin("emit", function(compilation, callback) {
       console.log("emit");
-      
+      let filelist=''
+      compilation.chunks.forEach(chunk=>{
+        chunk.files.forEach(filename=>{
+          filelist+=filename+'\n\n\n'
+
+          filelist += compilation.assets[filename].source()+'\n\n\n'
+        })
+      })
+     // 1. 拿到$t的内容  t(\"order\", \"订单\")) + \"\\n  \")
+      let obj={
+        'order':{
+          '订单':'订单'
+        }
+      }
+      //2. 读取data.js , str1
+
+     // 3. 写到data.js中
+      let str1='export default ' +JSON.stringify(obj,null,'\t')
+        let str2 = fs.readFileSync(
+          process.cwd() + "/src/cn.js",
+          "utf-8"
+        );
+      if(str1 !== str2){
+        console.log(55555)
+        // 写进去
+        fs.writeFileSync(process.cwd() + "/src/cn.js", str1);
+      }
+
+      changeTag=!changeTag
+      compilation.assets["readme.js"] = {
+        source: function() {
+          return filelist;
+        },
+        size: function() {
+          return filelist.length;
+        }
+      };
       callback();
     });
 
