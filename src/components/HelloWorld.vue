@@ -1,9 +1,12 @@
 
 <template>
 <div>
-  {{$t('order','订单23')}}
+  {{$t('order','订单')}}
+  <router-link to="/foo">foo</router-link>
+  <router-link to="/bar">bar</router-link>
   <br>
   {{$d}}
+  <router-view></router-view>
 </div>
 </template>
 
@@ -50,7 +53,7 @@ export default {
   name: 'app',
   data () {
     return {
-      name: 'name1234'
+      name: 'name12345'
     }
   },
   methods:{

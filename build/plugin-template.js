@@ -64,12 +64,11 @@ class EndWebpackPlugin {
     //   callback();
     // });
     compiler.plugin("before-compile", (compilation, callback) => {
-      console.log("before-compile");
+      console.log("before-compile",compilation);
       callback();
     });
     compiler.plugin("compilation", function(compilation) {
-      console.log("compilation");
-
+      console.log("compilation"); 
     });
 
     compiler.plugin("after-compile", (compilation, callback) => {

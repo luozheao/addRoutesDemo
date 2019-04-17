@@ -1,12 +1,15 @@
 <template>
-    <div>hehe</div>
+    <div>
+        HelloWorld2
+        {{$t('order','订单2')}}
+    </div>
 </template>
 
 <script>
     export default {
-        name: "HelloWorld123",
+        name: "HelloWorld2",
         mounted(){
-          debugger
+         
         }
     }
 </script>
